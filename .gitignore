@@ -1,0 +1,7 @@
+.vscode/
+*build/
+
+venv/
+
+structure.drawio
+.$structure.drawio.bkp

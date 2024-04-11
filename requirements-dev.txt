@@ -1,0 +1,5 @@
+setuptools
+cython
+pytest
+numpy
+matplotlib
