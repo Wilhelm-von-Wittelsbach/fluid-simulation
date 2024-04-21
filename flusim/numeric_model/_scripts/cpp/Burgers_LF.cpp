@@ -7,93 +7,14 @@
 
 
 
-
-
-
-//std::vector<std::vector<double>> LF_Burgers(std::vector<double> u0, int n, double T, double CFL, double left_bd, double right_bd, int bc)
-//{
-  //if (bc == 1){
- //   return std::vector<std::vector<double>> LF_Burgers_bc1(std::vector<double> u0, int n, double T, double CFL, double left_bd, double right_bd);
- // }
-  //else if (bc == 2){
-  //  std::vector<std::vector<double>> LF_Burgers_bc2(std::vector<double> u0, int n, double T, double CFL, double left_bd, double right_bd);
-  //}
-  //else {
-  //  std::vector<std::vector<double>> LF_Burgers_bc3(std::vector<double> u0, int n, double T, double CFL, double left_bd, double right_bd);
- // }
-
-//}
-
-
-
-
-// function to calculate Burgers equation with boundary condition 1, using LF scheme, needing initial condition u0, average grid numers n in [0,1], end_time T, CFL number CFL
-std::vector<std::vector<double>> LF_Burgers_bc1(std::vector<double> u0, int N, double T, double CFL, double left_bd, double right_bd)
-{
-   // spacial and time steps, time_steps
-
-  double space_length = right_bd - left_bd;
-  
-  double current_t = 0;
-
-  double dt = 0;
-
-  int tik = 0;
-
-  double dx = space_length/N;
-
-  // Here we need max_wave_velocity * time_step/space_step <=CFL number
-
- 
-
-  // intial the solution, here first component is time grid, second is space grid
-
-  std::vector<std::vector<double>> u(1,std::vector<double>(N,0));
-
-   for (int i = 0;i<N; i++)
-   {
-     u[0][i] = u0[i];
-   }
-
-
-  // begin calculation, with boundary condition needed
-
-     while (current_t<=T)
-     {
-
-      // notice here max_was_velocity us f^{/prime}, for Burgers equation it's u
-
-      double max_un = max_elementof_vector(u[tik]);
-
-       dt = 0.95*dx/(max_un);
-
-       std::vector<double> newtime_row(N,0);
-
-       u.push_back(newtime_row);
-
-     }
-
-
-return u;
-  
-
-  
-
-
-}
-
-
-
-// calculate the flux for LF scheme, but it depends on the boundary condition !!!!!!
+// calculate the flux for LF scheme of dimension 1
 // Here the boundaru condition is 1, which is periodic 
-std::vector<double> LF_flux_Burgers_bc1(std::vector<double> un, double dt, double dx)
+std::vector<double> LF_flux_Burgers_dim1_bc1(std::vector<double> un, double lamda_n)
 {
 
   
 
   int un_length = un.size();
-
-  double lamda_n = dt/dx;
 
   std::vector<double> fn(un_length+1,0);
 
@@ -113,6 +34,107 @@ std::vector<double> LF_flux_Burgers_bc1(std::vector<double> un, double dt, doubl
   }
   
   return fn;
+
+}
+
+
+
+
+// function to calculate Burgers equation with boundary condition 1, using LF scheme, needing initial condition u0, average grid numers n in [0,1], end_time T, CFL number CFL
+std::vector<std::vector<double>> LF_Burgers_dim1(std::vector<double> u0, int N, double T, double CFL, double left_bd, double right_bd)
+{
+   // length
+
+  double space_length = right_bd - left_bd;
+
+  //current time. begins from 0
+  
+  double current_t = 0;
+
+  // time step
+
+  double dt = 0;
+
+  // lamda = time step / space step
+
+  double lamda = 1;
+
+  // time evolution steps
+
+  int tik = 0;
+
+  // space step
+
+  double dx = space_length/N;
+
+  //flux
+
+  std::vector<double> f_half(N+1,0);
+
+
+  // Here we need max_wave_velocity * time_step/space_step <=CFL number
+
+  // intial the solution, here first component is time grid, second is space grid
+
+  std::vector<std::vector<double>> u(1,std::vector<double>(N,0));
+
+   for (int i = 0;i<N; i++)
+   {
+     u[0][i] = u0[i];
+   }
+
+
+  // begin calculation, evolute until time achieves maximum time
+
+     while (current_t<=T)
+     {
+
+      // notice here max_was_velocity us f^{/prime}, for Burgers equation it's u
+
+      double max_un = max_elementof_vector(u[tik]);
+
+      // calculate dt from CFL
+
+       dt = 0.95*dx/(max_un);
+
+       // if dt larger than the remain time, then dt should be the remain time
+
+       if (dt>T- current_t)
+       {
+        dt = T - current_t;
+        }
+       
+ 
+      // add new row for u
+
+       std::vector<double> newtime_row(N,0);
+
+       u.push_back(newtime_row);
+
+       lamda = dt/dx;
+
+       // calculate flux
+
+       f_half = LF_flux_Burgers_dim1_bc1(u[tik], lamda);
+
+       //calculate u for next time
+
+       for (int j= 0; j<N;j++)
+       {
+        u[tik + 1][j] = u[tik][j] - lamda*(f_half[j+1]-f_half[j]);
+       }
+           
+      // update time
+
+       current_t = current_t + dt;
+
+       tik = tik + 1;
+
+     }
+
+
+return u;
+  
 
 }
 
