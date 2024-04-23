@@ -4,6 +4,14 @@
 #include<algorithm>
 #include "functions_lib.h"
 
+
+int sign(double x)
+{
+
+  return (x>0) - (x<0);
+
+}
+
 double max_elementof_vector(std::vector<double> v)
 {
 
@@ -21,5 +29,12 @@ for (int i =0;i <len;i++)
 }
 
 return tmp;
+
+}
+
+double minmod(double a, double b)
+{
+   return 0.5*(sign(a) + sign(b)) * std::min(std::abs(a),std::abs(b));
+
 
 }

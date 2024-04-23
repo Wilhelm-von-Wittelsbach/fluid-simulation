@@ -5,4 +5,6 @@
 
 double max_elementof_vector(std::vector<double> v);
 
+double minmod(double a, double b);
+
 #endif
