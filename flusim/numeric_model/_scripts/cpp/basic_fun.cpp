@@ -38,3 +38,14 @@ double minmod(double a, double b)
 
 
 }
+
+double Burgers_f(double x)
+{
+    return 0.5*x*x;
+}
+
+
+double Burgers_df(double x)
+{
+  return x;
+}
