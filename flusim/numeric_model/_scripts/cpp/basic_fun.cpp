@@ -49,3 +49,33 @@ double Burgers_df(double x)
 {
   return x;
 }
+
+double Godunov_flux_Burgers(double ul, double ur)
+{
+   
+   double fG = 0;
+
+   if (ul>=ur)
+   {
+      if (Burgers_f(ul) >= Burgers_f(ur))
+      {
+        return Burgers_f(ul);
+      }
+      else return Burgers_f(ur);
+
+   }
+
+   else if (ul<ur)
+   {
+    if (Burgers_df(ul)>=0)
+    {
+        return Burgers_f(ul);
+    }
+    else if (Burgers_df(ur)<0)
+    {
+        return Burgers_f(ur);
+    }
+   }
+   else return 0;
+
+}
