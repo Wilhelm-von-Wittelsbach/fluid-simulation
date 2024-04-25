@@ -4,13 +4,21 @@
 #include<algorithm>
 #include "functions_lib.h"
 
-
+// sign function to calculate sign
 int sign(double x)
 {
 
   return (x>0) - (x<0);
 
 }
+
+double diff_1_minus_2(double a, double b)
+{
+  return a - b;
+}
+
+
+// find the largest element in a vector
 
 double max_elementof_vector(std::vector<double> v)
 {
@@ -32,6 +40,8 @@ return tmp;
 
 }
 
+// minmod function
+
 double minmod(double a, double b)
 {
    return 0.5*(sign(a) + sign(b)) * std::min(std::abs(a),std::abs(b));
@@ -39,16 +49,23 @@ double minmod(double a, double b)
 
 }
 
+// flux function for Burgers equation
+
 double Burgers_f(double x)
 {
     return 0.5*x*x;
 }
+
+// first order derivative of flux function of Burgers equation
 
 
 double Burgers_df(double x)
 {
   return x;
 }
+
+
+// Godunov flux for Burgers equation
 
 double Godunov_flux_Burgers(double ul, double ur)
 {
