@@ -95,7 +95,7 @@ std::vector<std::vector<double>> LF_Burgers_dim1(std::vector<double> u0, int N, 
 
       // calculate dt from CFL
 
-       dt = 0.95*dx/(max_un);
+       dt = CFD*dx/(max_un);
 
        // if dt larger than the remain time, then dt should be the remain time
 

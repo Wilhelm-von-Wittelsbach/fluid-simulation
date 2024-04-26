@@ -70,6 +70,99 @@ std::vector<double> slope_res(std::vector<double> un)
 std::vector<std::vector<double>> MUSCL_Burgers_dim1_bc1(std::vector<double> u0, int N, double T, double CFL, double left_bd, double right_bd)
 {
 
+     // length
+
+  double space_length = right_bd - left_bd;
+
+  //current time. begins from 0
+  
+  double current_t = 0;
+
+  // time step
+
+  double dt = 0;
+
+  // lamda = time step / space step
+
+  double lamda = 1;
+
+  // time evolution steps
+
+  int tik = 0;
+
+  // space step
+
+  double dx = space_length/N;
+
+  std::vector<std::vector<double>> u(1, std::vector<double>(N,1));
+
+  std:vector<double>u_star(N,1);
+  double L = 0;
+
+  for (int i=0; i<N;i++)
+  {
+    u[0][i] = u0[i];
+  }
+
+
+  while (current_t<T)
+  {
+
+    // notice here max_was_velocity us f^{/prime}, for Burgers equation it's u
+
+      double max_un = max_elementof_vector(u[tik]);
+
+      // calculate dt from CFL
+
+       dt = CFD*dx/(max_un);
+
+
+       lamda = dt/dx;
+
+       // if dt larger than the remain time, then dt should be the remain time
+
+       if (dt>T- current_t)
+       {
+        dt = T - current_t;
+        }
+
+
+
+        std::vector<double>slope = slope_res(u[tik]);
+
+    
+    // Use second stage Runge-Kutta, which has second order accuracy
+
+    for (int j = 0;j<N;j++)
+    {
+
+
+
+        ul = u[tik][j] + 0.5*dx*slope[j];
+
+        ur = u[tik][j+1] - 0.5*dx*slope[j+1];
+
+        L = -1*lamda*(     )
+
+        u_star[j] = u[tik][j] + dt*
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+
     
 }
 
