@@ -71,6 +71,8 @@ std::vector<std::vector<double>> LF_Burgers_dim1(std::vector<double> u0, int N, 
 
   std::vector<double> f_half(N+1,0);
 
+  std::vector<double> newtime_row(N,0);
+
 
   // Here we need max_wave_velocity * time_step/space_step <=CFL number
 
@@ -107,7 +109,6 @@ std::vector<std::vector<double>> LF_Burgers_dim1(std::vector<double> u0, int N, 
  
       // add new row for u
 
-       std::vector<double> newtime_row(N,0);
 
        u.push_back(newtime_row);
 

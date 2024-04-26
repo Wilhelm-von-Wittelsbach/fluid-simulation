@@ -66,6 +66,23 @@ std::vector<double> slope_res(std::vector<double> un)
 }
 
 
+std::vector<double> L_U(std::vector<double> un, double dx, std::vector<double> slope)
+{
+
+
+    int len = un.size();
+
+    std::vector<double> L(len,0);
+
+    for (int i = 0;i<len)
+
+
+}
+
+
+
+
+
 
 std::vector<std::vector<double>> MUSCL_Burgers_dim1_bc1(std::vector<double> u0, int N, double T, double CFL, double left_bd, double right_bd)
 {
@@ -96,7 +113,11 @@ std::vector<std::vector<double>> MUSCL_Burgers_dim1_bc1(std::vector<double> u0, 
 
   std::vector<std::vector<double>> u(1, std::vector<double>(N,1));
 
-  std:vector<double>u_star(N,1);
+  std::vector<double>u_star(N,1);
+
+  std::vector<double> newtime_row(N,0);
+
+
   double L = 0;
 
   for (int i=0; i<N;i++)
@@ -117,8 +138,6 @@ std::vector<std::vector<double>> MUSCL_Burgers_dim1_bc1(std::vector<double> u0, 
        dt = CFD*dx/(max_un);
 
 
-       lamda = dt/dx;
-
        // if dt larger than the remain time, then dt should be the remain time
 
        if (dt>T- current_t)
@@ -126,25 +145,46 @@ std::vector<std::vector<double>> MUSCL_Burgers_dim1_bc1(std::vector<double> u0, 
         dt = T - current_t;
         }
 
-
+        lamda = dt/dx;
 
         std::vector<double>slope = slope_res(u[tik]);
 
-    
-    // Use second stage Runge-Kutta, which has second order accuracy
+        u.push_back(newtime_row);
 
-    for (int j = 0;j<N;j++)
+
+    
+    // Use second stage Runge-Kutta, which has second order accuracy, notice slope should be one more indice
+
+
+
+    // consider boundary condition, i = 0,  i = n-1
+
+    for (int j = 1;j<N-1;j++)
     {
 
+       // calculate first stage of R-K
+
+        ul_plus = u[tik][j] + 0.5*dx*slope[j+1];
+
+        ur_plus = u[tik][j+1] - 0.5*dx*slope[j+2];
+
+        ul_minus = u[tik][j-1] + 0.5*dx*slope[j];
+
+        ur_minus = u[tik][j] - 0.5*dx*slope[j+1];
+
+        L_Un = -1*lamda*( Godunov_flux_Burgers(ul_plus,ur_plus) - Godunov_flux_Burgers(ul_minus,ur_minus) );
+
+        u_star[j] = u[tik][j] + dt*L_Un;
+
+        u[tik+1][j] = 0.5*u[tik][j] + 0.5*(u_)
 
 
-        ul = u[tik][j] + 0.5*dx*slope[j];
 
-        ur = u[tik][j+1] - 0.5*dx*slope[j+1];
 
-        L = -1*lamda*(     )
 
-        u_star[j] = u[tik][j] + dt*
+
+
+
 
 
 
